@@ -1,7 +1,7 @@
 :root {
   --color-primary: #4d0de5;
-  --color-secondary: #7da1f7;
-  --color-warning: #fae362;
+  --color-secondary: #2862eb;
+  --color-warning: #f7d931;
   --color-error: #f75e4b;
 }
 
@@ -29,44 +29,90 @@ body {
   );
   box-sizing: var(--color-secondary) 0px 20px 100px 0px;
 }
-#location{
-    width: 45px;
-    margin-right: 10px;
-    cursor: pointer;
-    transition: all 0.1s ease-in;
+#location {
+  width: 45px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+  /* background-color: #e7240b;
+  border-radius: 50%; */
 }
 
-#location:hover{
-    transform: scale(1.2);
+#location:hover {
+  transform: scale(1.1);
 }
 
-#search input{
-    width: 300px;
-    height: 35px;
-    border:none;
-    padding: 10px;
-    color: var(--color-primary);
-    font-size: 0.9rem;
-    border-radius: 10px 0 0 10px;
+#search input {
+  width: 300px;
+  height: 35px;
+  border: none;
+  padding: 10px;
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  border-radius: 10px 0 0 10px;
 }
 
-#search input:focus{
-    outline: none;
+#search input:focus {
+  outline: none;
 }
 
-#search button{
-    border: none;
-    background-color: var(--color-warning);
-    height: 35px;
-    line-height: 10px;
-    font-weight: 600;
-    padding: 10px;
-    border-radius: 0 10px 10px 0;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.1 ease-in;
+#search button {
+  border: none;
+  background-color: var(--color-warning);
+  height: 35px;
+  line-height: 10px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.1 ease-in;
 }
 
-#search button:hover{
-    color: var(--color-primary);
+#search button:hover {
+  color: var(--color-primary);
+}
+
+#weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  width: 500px;
+  min-height: 200px;
+  margin: auto;
+  margin-bottom: 50px;
+  position: relative;
+  bottom: 80px;
+  padding: 30px;
+  border-radius: 30px;
+  box-shadow: var(--color-secondary) 0px 25px 80px -25px;
+}
+
+#weather h1 {
+  color: var(--color-primary);
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+#weather #main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+#weather #main span {
+  margin: 0 30px 0 10px;
+  color: gray;
+}
+
+#weather #info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#weather #info span {
+  color: var(--color-secondary);
+  margin-left: 5px;
 }
