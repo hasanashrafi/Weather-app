@@ -1,77 +1,18 @@
-const BASE_URL = "https://api.openweathermap.org/data/2.5/"
-const API_KEY = "3622d22286024a6a008e0983c93e34ba"
-const DAYS = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
-]
+import getWeatherData from "../utils/httpReq.js";
+import { removeModal, showModal } from "../utils/modal.js";
+import getWeekDay from "../utils/customDate.js";
+
 const searchInput = document.querySelector("input");
 const searchButton = document.querySelector("button");
 const weatherContainer = document.getElementById("weather");
 const forecastContainer = document.getElementById("forecast");
 const locationIcon = document.getElementById("location")
+const modalButton = document.getElementById("modal-button")
 
-const getWeatherData = async (type, data) => {
-    let url = null;
-    switch (type) {
-        case "current":
-            if (typeof data === "string") {
-                url = `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`
-            } else {
-                url = `${BASE_URL}/weather?lat=${data.lat}&lon=${data.lon}&appid=${API_KEY}&units=metric`
-            }
-            break;
-        case "forecast":
-            if (typeof data === "string") {
-                url = `${BASE_URL}/forecast?q=${city}&appid=${API_KEY}&units=metric`
-            } else {
-                url = `${BASE_URL}/forecast?lat=${data.lat}&lon=${data.lon}&appid=${API_KEY}&units=metric`
-            } forecast
-            break;
 
-        default:
-            url = `${BASE_URL}/weather?q=tehran&appid=${API_KEY}&units=metric`
-            break;
-    }
-    const response = await fetch(url);
-    const json = await response.json();
-    return json
-}
-
-const getCurrentWeatherByName = async (city) => {
-    const url = `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url);
-    const json = await response.json();
-    return json
-}
-
-const getCurrentWeatherByCoordinates = async (lat, lon) => {
-    const url = `${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url);
-    const json = await response.json();
-    return json
-}
-
-const getForecastWeatherByName = async (city) => {
-    const url = `${BASE_URL}/forecast?q=${city}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url);
-    const json = await response.json();
-    return json
-}
-
-const getForecastWeatherByCoordinates = async (lat, lon) => {
-    const url = `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url);
-    const json = await response.json();
-    return json
-}
 
 const renderCurrentWeather = (data) => {
-    console.log(data);
+    if (!data) return;
     const weatherJSX = `
     <h1>${data.name},${data.sys.country}</h1>
     <div id="main">
@@ -87,10 +28,9 @@ const renderCurrentWeather = (data) => {
     weatherContainer.innerHTML = weatherJSX
 }
 
-const getWeekDay = (date) => {
-    return DAYS[new Date(date * 1000).getDay()];
-}
+
 const renderForecastWeather = (data) => {
+    if (!data) return
     forecastContainer.innerHTML = "";
     data = data.list.filter((obj => obj.dt_txt.endsWith("12:00:00")))
     data.forEach((i) => {
@@ -107,43 +47,48 @@ const renderForecastWeather = (data) => {
 }
 
 const searchHandler = async () => {
+
     const cityName = searchInput.value
     if (!cityName) {
-        alert("Please Enter City Name")
+        showModal("Please Enter City Name");
+        return
     }
-
-    const currentData = await getCurrentWeatherByName(cityName)
+    const currentData = await getWeatherData("current", cityName)
     renderCurrentWeather(currentData)
-    const forecastData = await getForecastWeatherByName(cityName);
+    const forecastData = await getWeatherData("forecast", cityName);
     renderForecastWeather(forecastData)
 }
 
 const positionCallback = async (position) => {
     const { latitude, longitude } = position.coords
-    const currentData = await getCurrentWeatherByCoordinates(latitude, longitude);
+    const currentData = await getWeatherData("current", position.coords);
     renderCurrentWeather(currentData)
-    const forecastData = await getForecastWeatherByCoordinates(latitude, longitude)
+    const forecastData = await getWeatherData("forecast", position.coords);
     renderForecastWeather(forecastData)
 }
 
-
 const errorCallback = (error) => {
-    console.log(error);
+    showModal(error);
 }
-
 
 const locationHandler = () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(positionCallback, errorCallback)
     } else {
-        alert("Your Browser does not support geolocation ")
+        showModal("Your Browser does not support geolocation ")
     }
 }
 
-
-
+const initHandler = async () => {
+    const currentData = await getWeatherData("current", "tabriz");
+    renderCurrentWeather(currentData);
+    const forecastData = await getWeatherData("forecast", "tabriz");
+    renderForecastWeather(forecastData);
+}
 
 
 
 searchButton.addEventListener("click", searchHandler);
 locationIcon.addEventListener("click", locationHandler)
+modalButton.addEventListener("click", removeModal)
+document.addEventListener("DOMContentLoaded", initHandler)
