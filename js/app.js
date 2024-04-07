@@ -9,8 +9,6 @@ const forecastContainer = document.getElementById("forecast");
 const locationIcon = document.getElementById("location")
 const modalButton = document.getElementById("modal-button")
 
-
-
 const renderCurrentWeather = (data) => {
     if (!data) return;
     const weatherJSX = `
@@ -27,7 +25,6 @@ const renderCurrentWeather = (data) => {
     `
     weatherContainer.innerHTML = weatherJSX
 }
-
 
 const renderForecastWeather = (data) => {
     if (!data) return
@@ -47,7 +44,6 @@ const renderForecastWeather = (data) => {
 }
 
 const searchHandler = async () => {
-
     const cityName = searchInput.value
     if (!cityName) {
         showModal("Please Enter City Name");
@@ -58,7 +54,6 @@ const searchHandler = async () => {
     const forecastData = await getWeatherData("forecast", cityName);
     renderForecastWeather(forecastData)
 }
-
 const positionCallback = async (position) => {
     const { latitude, longitude } = position.coords
     const currentData = await getWeatherData("current", position.coords);
